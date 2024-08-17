@@ -1,85 +1,56 @@
 import { useState } from "react";
+import Logo from "./components/Logo";
+import Form from "./components/Form";
+import CheckList from "./components/CheckList";
+import Stats from "./components/Stats";
+
 import "./index.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
-const listItems = [
-  { id: 1, title: "eat", done: false },
-  { id: 2, title: "sleep", done: true },
-];
-
 function App() {
-  return (
-    <div className="app">
-      <Logo />
-      <Form />
-      <CheckList />
-      <Stats />
-    </div>
-  );
-}
+  const [listItems, setListItems] = useState([]);
 
-function Logo() {
-  return <span className="logo">To - Do List</span>;
-}
+  function handleAddItem(item) {
+    setListItems((listItems) => [...listItems, item]);
+  }
 
-function Form() {
-  const [title, setTitle] = useState("");
+  function handleDeleteItem(id) {
+    setListItems((listItems) => listItems.filter((item) => item.id !== id));
+  }
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    console.log(e);
+  function handleToggleItem(id) {
+    setListItems((listItems) => {
+      return listItems.map((item) => {
+        if (item.id === id) {
+          return {
+            ...item,
+            done: !item.done,
+          };
+        }
+        return item;
+      });
+    });
+  }
+
+  function handlerClearItems() {
+    const confirm = window.confirm("Ingin menghapus Catatan?");
+    if (confirm) {
+      setListItems([]);
+    }
   }
 
   return (
-    <form className="add-form" onSubmit={handleSubmit}>
-      <h3>Ada yang mau di catat</h3>
-      <input
-        type="text"
-        name="title"
-        id=""
-        value={title}
-        onChange={(e) => {
-          setTitle(e.target.value);
-        }}
+    <div className="app">
+      <Logo />
+      <Form onAddItem={handleAddItem} />
+      <CheckList
+        items={listItems}
+        onDeleteItem={handleDeleteItem}
+        onToggleItem={handleToggleItem}
+        onClearItems={handlerClearItems}
       />
-      <button>
-        <i class="fa fa-add" style={{ color: "white" }}></i>
-      </button>
-    </form>
-  );
-}
-
-function CheckList() {
-  return (
-    <div className="list">
-      <ul>
-        {listItems.map((item) => (
-          <Item key={item.id} item={item} />
-        ))}
-      </ul>
+      <Stats items={listItems} />
     </div>
-  );
-}
-
-function Item({ item }) {
-  return (
-    <li>
-      <input type="checkbox" />
-      <span style={{ textDecoration: item.done ? "line-through" : "" }}>
-        {item.title}
-      </span>
-      <button>
-        <i class="fa fa-close" style={{ fontSize: "24px", color: "red" }}></i>
-      </button>
-    </li>
-  );
-}
-
-function Stats() {
-  return (
-    <footer className="stats">
-      <span>stats</span>
-    </footer>
   );
 }
 
