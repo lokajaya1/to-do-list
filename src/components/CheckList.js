@@ -1,11 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import Item from "./Item";
 
 function CheckList({ items, onToggleItem, onDeleteItem, onClearItems }) {
+  const [sortBy, setSortBy] = useState("input");
+
+  function sortItems() {
+    return [...items].sort((a, b) => {
+      if (sortBy === "title") {
+        return a.title.localeCompare(b.title);
+      } else if (sortBy === "status") {
+        return a.completed - b.completed;
+      } else {
+        return a.id - b.id;
+      }
+    });
+  }
+
+  const sortedItems = sortItems();
   return (
     <div className="list">
       <ul>
-        {items.map((item) => (
+        {sortedItems.map((item) => (
           <Item
             key={item.id}
             item={item}
@@ -15,7 +30,11 @@ function CheckList({ items, onToggleItem, onDeleteItem, onClearItems }) {
         ))}
       </ul>
       <div className="actions">
-        <select name="" id=""></select>
+        <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+          <option value="input">Urutkan Berdasarkan Input</option>
+          <option value="title">Urutkan Berdasarkan Title</option>
+          <option value="status">Urutkan Berdasarkan Status</option>
+        </select>
         <button onClick={onClearItems}>Hapus</button>
       </div>
     </div>
