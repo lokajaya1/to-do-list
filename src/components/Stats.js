@@ -1,12 +1,12 @@
 function Stats({ items }) {
   const totalItems = items.length;
 
-  const completedItems = items.filter((item) => item.done).length;
+  const doneItems = items.filter((item) => item.done).length;
 
   return (
     <footer className="stats">
       <span>
-        {completedItems} / {totalItems} Catatan Selesai
+        {doneItems} / {totalItems} Catatan Selesai
       </span>
     </footer>
   );

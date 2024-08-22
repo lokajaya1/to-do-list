@@ -9,7 +9,7 @@ function CheckList({ items, onToggleItem, onDeleteItem, onClearItems }) {
       if (sortBy === "title") {
         return a.title.localeCompare(b.title);
       } else if (sortBy === "status") {
-        return a.completed - b.completed;
+        return a.done === b.done ? 0 : a.done ? 1 : -1;
       } else {
         return a.id - b.id;
       }

@@ -9,7 +9,7 @@ function Form({ onAddItem }) {
       const newItem = {
         id: Date.now(),
         title: title,
-        completed: false,
+        done: false,
       };
       onAddItem(newItem);
       setTitle("");
